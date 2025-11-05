@@ -19,16 +19,24 @@ spec:
         image: uchamod/currency-exchanger:2
         ports:
         - containerPort: 5000
+        env:
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: backend-secret
+              key: api-key
+
+
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service
+  name: backend-service
 spec:
   selector:
-    app.kubernetes.io/name: MyApp
+    app: currency-exchanger
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 9376
+      port: 5000
+      targetPort: 5000
